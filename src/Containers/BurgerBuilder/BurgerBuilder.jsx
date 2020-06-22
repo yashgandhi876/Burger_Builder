@@ -4,6 +4,8 @@ import Burger from "../../Components/Burger/Burger";
 import Aux from "../../hoc/Auxilary/Auxilary";
 import Modal from "../../Components/UI/Modal/Modal";
 import OrderSummary from "../../Components/Burger/OrderSummary/OrderSummary";
+import axios from "../../axios-orders";
+import Spinner from "../../Components/UI/Spinner/Spinner";
 
 const Ingrediant_Price = {
   salad: 30,
@@ -22,6 +24,7 @@ class BurgerBuilder extends Component {
     },
     totalPrice: 60,
     purchasable: false,
+    showSpinner: false,
   };
 
   addIngrediantHandler = (type) => {
@@ -68,7 +71,28 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinue = () => {
-    alert(`Continue`);
+    this.setState({ showSpinner: true });
+    let data = {
+      ingrediants: this.state.ingridents,
+      price: this.state.totalPrice,
+      customer: {
+        name: `yash gandhi`,
+        address: `test street`,
+        zipcode: 12423,
+      },
+      email: "test@test.com",
+      deiveryMethod: "fastest",
+    };
+    axios
+      .post("/order.json", data)
+      .then((res) => {
+        console.log(res);
+        this.setState({ showSpinner: false, purchasable: false });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ showSpinner: false, purchasable: false });
+      });
   };
 
   render() {
@@ -76,15 +100,21 @@ class BurgerBuilder extends Component {
     for (let i in disableInfo) {
       disableInfo[i] = disableInfo[i] < 1;
     }
+    let orderSummary = (
+      <OrderSummary
+        close={this.closeModal}
+        continue={this.purchaseContinue}
+        ingrediants={this.state.ingridents}
+        price={this.state.totalPrice}
+      />
+    );
+    if (this.state.showSpinner) {
+      orderSummary = <Spinner />;
+    }
     return (
       <Aux>
         <Modal modalclicked={this.closeModal} show={this.state.purchasable}>
-          <OrderSummary
-            close={this.closeModal}
-            continue={this.purchaseContinue}
-            ingrediants={this.state.ingridents}
-            price={this.state.totalPrice}
-          />
+          {orderSummary}
         </Modal>
         <Burger ingridents={this.state.ingridents} />
         <BuildControls
