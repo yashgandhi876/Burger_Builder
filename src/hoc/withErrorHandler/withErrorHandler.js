@@ -22,6 +22,7 @@ const withErrorHanler = (WrappedComponent, axios) => {
     }
 
     componentWillUnmount() {
+      console.log(`will unmount`, this.reqInterceptor, this.resInterceptor);
       axios.interceptors.request.eject(this.reqInterceptor);
       axios.interceptors.response.eject(this.resInterceptor);
     }

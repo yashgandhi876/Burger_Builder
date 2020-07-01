@@ -25,6 +25,7 @@ class BurgerBuilder extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props)
     axios
       .get(
         "https://burger-builder-applicati-3be98.firebaseio.com/ingrediants.json"
@@ -81,30 +82,40 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinue = () => {
-    this.setState({ showSpinner: true });
+    // this.setState({ showSpinner: true });
+    
 
-    let data = {
-      ingrediants: this.state.ingridents,
-      price: this.state.totalPrice,
-      customer: {
-        name: `yash gandhi`,
-        address: `test street`,
-        zipcode: 12423,
-      },
-      email: "test@test.com",
-      deiveryMethod: "fastest",
-    };
+    // let data = {
+    //   ingrediants: this.state.ingridents,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: `yash gandhi`,
+    //     address: `test street`,
+    //     zipcode: 12423,
+    //   },
+    //   email: "test@test.com",
+    //   deiveryMethod: "fastest",
+    // };
 
-    axios
-      .post("/order.json", data)
-      .then((res) => {
-        console.log(res);
-        this.setState({ showSpinner: false, purchasable: false });
-      })
-      .catch((err) => {
-        console.log(err.message);
-        this.setState({ showSpinner: false, purchasable: false });
-      });
+    // axios
+    //   .post("/order.json", data)
+    //   .then((res) => {
+    //     console.log(res);
+    //     this.setState({ showSpinner: false, purchasable: false });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //     this.setState({ showSpinner: false, purchasable: false });
+    //   });
+    const query = [];
+    for (let i in this.state.ingridents){
+      query.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingridents[i]));
+    }
+    const queryString = query.join("&");
+    this.props.history.push({
+      pathname:'/checkout',
+      search:'?' + queryString
+    });
   };
 
   render() {
