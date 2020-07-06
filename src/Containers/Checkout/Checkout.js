@@ -14,7 +14,7 @@ class Checkout extends Component {
 		const ingrident = {};
 		let price = 0;
 		for (let i of query.entries()) {
-			if (i[0] === 'price') {
+			if (i[0] === 'totalPrice') {
 				price = i[1];
 			} else {
 				ingrident[i[0]] = +i[1];
@@ -31,13 +31,13 @@ class Checkout extends Component {
 	};
 
 	render() {
-		console.log(this.props.match.path);
 		return (
 			<div>
 				<CheckoutSummary
 					checkoutCancelled={this.checkoutCancelledHandler}
 					checkoutContinued={this.checkoutContinuedHandler}
 					ingridents={this.state.ingridents}
+					totalPrice={this.state.totalPrice}
 				/>
 				<Route
 					path={this.props.match.path + '/contact-data'}

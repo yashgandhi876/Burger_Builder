@@ -25,7 +25,6 @@ class BurgerBuilder extends Component {
 	};
 
 	componentDidMount() {
-		console.log(this.props);
 		axios
 			.get('https://burger-builder-applicati-3be98.firebaseio.com/ingrediants.json')
 			.then((res) => {
@@ -84,7 +83,7 @@ class BurgerBuilder extends Component {
 		for (let i in this.state.ingridents) {
 			query.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingridents[i]));
 		}
-		query.push('totalPrice' + this.state.totalPrice);
+		query.push('totalPrice=' + this.state.totalPrice);
 		const queryString = query.join('&');
 		this.props.history.push({
 			pathname: '/checkout',

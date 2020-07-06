@@ -17,12 +17,11 @@ class ContactData extends Component {
 
 	orderHanlder = (event) => {
 		event.preventDefault();
-		console.log(this.props.ingridents);
 		this.setState({ showSpinner: true });
 
 		let data = {
-			ingrediants: this.state.ingridents,
-			price: this.props.totalPrice,
+			ingrediants: this.props.ingridents,
+			totalPrice: this.props.price,
 			customer: {
 				name: `yash gandhi`,
 				address: `test street`,
@@ -34,8 +33,7 @@ class ContactData extends Component {
 
 		axios
 			.post('/order.json', data)
-			.then((res) => {
-				console.log(res);
+			.then(() => {
 				this.setState({ showSpinner: false });
 				this.props.history.push('/');
 			})
